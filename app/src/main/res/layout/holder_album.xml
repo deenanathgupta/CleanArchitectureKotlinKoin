@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="album"
+            type="com.android.cardinalhealthtask.domain.model.Album" />
+    </data>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_margin="4dp"
+        android:padding="4dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/post_title_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:text="@{album.title}"
+            tools:text="there are those who welcome the fault-pleasing"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/body2" />
+
+    </androidx.cardview.widget.CardView>
+
+
+</layout>
