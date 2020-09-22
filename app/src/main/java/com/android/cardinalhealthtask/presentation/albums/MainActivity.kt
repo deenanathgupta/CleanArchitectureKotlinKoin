@@ -17,12 +17,13 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
     private lateinit var activityPostsBinding: ActivityMainBinding
     private val albumViewModel: AlbumViewModel by viewModel()
-    lateinit var navController: NavController
+    private lateinit var navController: NavController
 
     @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityPostsBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         initNavigation()
         setObserver()
     }
@@ -40,5 +41,18 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
         navController = navHostFragment.navController
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+    override fun onBackPressed() {
+        if(navController.currentDestination?.id == R.id.photoFragment) {
+            navController.popBackStack()
+        } else {
+            super.onBackPressed()
+        }
     }
 }

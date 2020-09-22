@@ -9,18 +9,20 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.android.cardinalhealthtask.extension.toast
 import com.android.cardinalhealthtask.network.NetworkChecker
 import com.android.cardinalhealthtask.presentation.albums.AlbumViewModel
 import com.android.cardinalhealthtask.presentation.albums.PhotoAdapter
-import com.android.cardinalhealthtask.utils.*
+import com.android.cardinalhealthtask.presentation.common.NoInternetLayout
+import com.android.cardinalhealthtask.utils.DisplayUtility
+import com.android.cardinalhealthtask.utils.LANDSCAPE_TILE_COUNT
+import com.android.cardinalhealthtask.utils.PORTRAIT_TILE_COUNT
 import com.cardinalhealth.sample.R
 import com.cardinalhealth.sample.databinding.FragmentPhotoBinding
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 
-class PhotoFragment : Fragment() {
-    private lateinit var _binding: FragmentPhotoBinding
+class PhotoFragment : Fragment(), NoInternetLayout.Callback {
+    private lateinit var binding: FragmentPhotoBinding
     private val albumViewModel: AlbumViewModel by sharedViewModel()
     private var mAdapter: PhotoAdapter? = null
 
@@ -33,24 +35,30 @@ class PhotoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentPhotoBinding.inflate(inflater, container, false)
-        return _binding.root
+        binding = FragmentPhotoBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val albumId= arguments?.getString(ID)
+        setBindingModel()
         doPhotoRequest(albumId)
         val numOfColumns: Int = getColumnCount()
         setAdapter(numOfColumns)
         setObserver()
     }
 
+    private fun setBindingModel() {
+        binding.lifecycleOwner = this
+        binding.model = albumViewModel
+    }
+
     private fun setAdapter(numOfColumns: Int) {
         mAdapter = PhotoAdapter()
-        _binding.photosRecyclerView.layoutManager =
+        binding.photosRecyclerView.layoutManager =
             GridLayoutManager(requireContext(), numOfColumns)
-        _binding.photosRecyclerView.adapter = mAdapter
+        binding.photosRecyclerView.adapter = mAdapter
     }
 
     private fun getColumnCount(): Int {
@@ -63,16 +71,17 @@ class PhotoFragment : Fragment() {
 
     private fun doPhotoRequest(albumId: String?) {
         if (NetworkChecker(requireContext()).isConnected()) {
+            albumViewModel.noInternet.value = false
             albumId?.let { albumViewModel.getPhotos(it) }
         } else {
-            activity?.toast(getString(R.string.no_internet_connection))
+            albumViewModel.noInternet.value = true
         }
     }
 
     private fun setObserver() {
         with(albumViewModel) {
             photosData.observe(viewLifecycleOwner, Observer {
-                _binding.postsProgressBar.visibility = View.GONE
+                binding.postsProgressBar.visibility = View.GONE
                 mAdapter?.mAlbumList = it
             })
             messageData.observe(viewLifecycleOwner, Observer {
@@ -80,12 +89,16 @@ class PhotoFragment : Fragment() {
             })
 
             showProgressbar.observe(viewLifecycleOwner, Observer { isVisible ->
-                _binding.postsProgressBar.visibility = if (isVisible) View.VISIBLE else View.GONE
+                binding.postsProgressBar.visibility = if (isVisible) View.VISIBLE else View.GONE
             })
         }
     }
 
     companion object {
         const val ID = "ALBUM_ID"
+    }
+
+    override fun onRetryClick() {
+        doPhotoRequest(albumViewModel.clickedAlbum.value?.id.toString())
     }
 }

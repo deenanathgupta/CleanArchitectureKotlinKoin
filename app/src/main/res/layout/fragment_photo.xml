@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:visibility="gone"
-            android:visibility="@{model.noInternet? View.VISIBLE: View.GONE}" />
+            android:visibility="@{(model.noInternet &amp;&amp; model.photosData.size() == 0)? View.VISIBLE: View.GONE}" />
 
     </FrameLayout>
 </layout>
