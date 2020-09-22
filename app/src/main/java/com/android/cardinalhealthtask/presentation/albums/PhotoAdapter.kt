@@ -5,10 +5,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.android.cardinalhealthtask.domain.model.Album
 import com.android.cardinalhealthtask.domain.model.AlbumItem
 import com.cardinalhealth.sample.R
-import com.cardinalhealth.sample.databinding.HolderAlbumBinding
 import com.cardinalhealth.sample.databinding.HolderPhotoBinding
 import kotlin.properties.Delegates
 

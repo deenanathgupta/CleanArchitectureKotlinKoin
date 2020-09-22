@@ -17,6 +17,8 @@ class AlbumViewModel constructor(
     val albumData = MutableLiveData<List<Album>>()
     val photosData = MutableLiveData<List<AlbumItem>>()
     val showProgressbar = MutableLiveData<Boolean>()
+    val noInternet = MutableLiveData<Boolean>()
+    val noResultFound = MutableLiveData<Boolean>()
     val messageData = MutableLiveData<String>()
     val clickedAlbum = MutableLiveData<Album>()
 

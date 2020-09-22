@@ -5,14 +5,14 @@ import okhttp3.ResponseBody
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
+import javax.net.ssl.HttpsURLConnection
 
 class ApiErrorHandle {
 
     fun traceErrorException(throwable: Throwable?): ErrorModel {
         val errorModel: ErrorModel? = when (throwable) {
-
             is HttpException -> {
-                if (throwable.code() == 401) {
+                if (throwable.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                     ErrorModel(
                         throwable.message(),
                         throwable.code(),
@@ -52,7 +52,7 @@ class ApiErrorHandle {
             // use response body to get error detail
             ErrorModel(
                 body.toString(),
-                400,
+                HttpsURLConnection.HTTP_BAD_REQUEST,
                 ErrorModel.ErrorStatus.BAD_RESPONSE
             )
         } catch (e: Throwable) {

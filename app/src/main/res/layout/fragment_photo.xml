@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="model"
+            type="com.android.cardinalhealthtask.presentation.albums.AlbumViewModel" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/photos_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
+            android:layout_height="match_parent" />
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/posts_progress_bar"
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/photos_recycler_view" />
+            android:visibility="@{model.showProgressbar ? View.VISIBLE: View.GONE}"
+            android:layout_gravity="center"
+            />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.android.cardinalhealthtask.presentation.common.NoInternetLayout
+            android:id="@+id/lyt_no_internet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="gone"
+            android:visibility="@{model.noInternet? View.VISIBLE: View.GONE}" />
+
+    </FrameLayout>
 </layout>

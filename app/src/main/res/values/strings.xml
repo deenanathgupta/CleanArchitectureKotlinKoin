@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">Album</string>
     <string name="no_internet_connection">No Internet Connection!</string>
-    <string name="photo">photo</string>
+    <string name="photo">Photo</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search">Search</string>
+    <string name="no_internet">No internet connection!</string>
+    <string name="check_network">Please check your internet connection and try again</string>
+    <string name="retry">RETRY</string>
+    <string name="no_result_found">No Result found</string>
 </resources>

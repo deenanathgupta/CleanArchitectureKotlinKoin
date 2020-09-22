@@ -12,20 +12,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.android.cardinalhealthtask.domain.model.Album
+import com.android.cardinalhealthtask.network.NetworkChecker
 import com.android.cardinalhealthtask.presentation.albums.AlbumAdapter
 import com.android.cardinalhealthtask.presentation.albums.AlbumViewModel
-import com.android.cardinalhealthtask.extension.toast
-import com.android.cardinalhealthtask.network.NetworkChecker
+import com.android.cardinalhealthtask.presentation.common.NoInternetLayout
 import com.cardinalhealth.sample.R
 import com.cardinalhealth.sample.databinding.FragmentAlbumsBinding
 import kotlinx.android.synthetic.main.fragment_albums.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 
-class AlbumsFragment : Fragment(), AlbumAdapter.Callback {
+class AlbumsFragment : Fragment(), AlbumAdapter.Callback, NoInternetLayout.Callback {
     private val albumViewModel: AlbumViewModel by sharedViewModel()
     private var mAdapter: AlbumAdapter? = null
-    private var _binding: FragmentAlbumsBinding? = null
+    private var binding: FragmentAlbumsBinding? = null
     private var mAlbumList = mutableListOf<Album>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,22 +37,42 @@ class AlbumsFragment : Fragment(), AlbumAdapter.Callback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAlbumsBinding.inflate(inflater, container, false)
-        return _binding?.root
+        binding = FragmentAlbumsBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setBinding()
+        setClickListener()
+        setAdapter()
+        doAlbumRequest()
+        setObserver()
+    }
+
+    private fun setBinding() {
+        binding?.lifecycleOwner = this
+        binding?.model = albumViewModel
+    }
+
+    private fun setClickListener() {
+        lyt_no_internet.setCallbackListener(this)
+    }
+
+    private fun setAdapter() {
         mAdapter = AlbumAdapter()
-        _binding?.albumRecyclerView?.layoutManager = GridLayoutManager(requireContext(), 2)
-        _binding?.albumRecyclerView?.adapter = mAdapter
+        binding?.albumRecyclerView?.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding?.albumRecyclerView?.adapter = mAdapter
         mAdapter?.setListener(this)
+    }
+
+    private fun doAlbumRequest() {
         if (NetworkChecker(requireContext()).isConnected()) {
             albumViewModel.getAlbums()
+            albumViewModel.noInternet.value = false
         } else {
-            activity?.toast(getString(R.string.no_internet_connection))
+            albumViewModel.noInternet.value = true
         }
-        setObserver()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -74,10 +94,11 @@ class AlbumsFragment : Fragment(), AlbumAdapter.Callback {
 
     private fun filterDataFromAlbumList(query: String?) {
         query?.let {
-            val filteredModelList: List<Album> = mAlbumList.filter {
+            val filteredList: List<Album> = mAlbumList.filter {
                 it.title.contains(query)
             }
-            mAdapter?.setAlbumData(filteredModelList)
+            mAdapter?.setAlbumData(filteredList)
+            albumViewModel.noResultFound.value = filteredList.isEmpty()
         }
     }
 
@@ -104,5 +125,14 @@ class AlbumsFragment : Fragment(), AlbumAdapter.Callback {
 
     override fun onItemClick(album: Album) {
         albumViewModel.clickedAlbum.value = album
+    }
+
+    override fun onRetryClick() {
+        doAlbumRequest()
+    }
+
+    override fun onResume() {
+        activity?.title = getString(R.string.app_name)
+        super.onResume()
     }
 }

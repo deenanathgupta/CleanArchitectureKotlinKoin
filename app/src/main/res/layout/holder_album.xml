@@ -15,11 +15,11 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_margin="4dp"
-        android:padding="4dp"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="4dp"
+        android:layout_height="@dimen/album_card_height"
+        android:layout_margin="@dimen/album_margin"
+        android:padding="@dimen/album_text_padding"
+        app:cardCornerRadius="@dimen/album_card_radius"
+        app:cardElevation="@dimen/cardview_default_elevation"
         app:cardUseCompatPadding="true">
 
 
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:layout_margin="8dp"
+            android:textStyle="bold"
             android:text="@{album.title}"
             tools:text="there are those who welcome the fault-pleasing"
             android:textColor="@color/colorTextPrimary"

@@ -1,5 +1,6 @@
 package com.android.cardinalhealthtask.presentation.albums.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +24,11 @@ class PhotoFragment : Fragment() {
     private val albumViewModel: AlbumViewModel by sharedViewModel()
     private var mAdapter: PhotoAdapter? = null
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        activity?.title = getString(R.string.photo)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,22 +40,33 @@ class PhotoFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val albumId= arguments?.getString(ID)
-        if(NetworkChecker(requireContext()).isConnected()) {
+        doPhotoRequest(albumId)
+        val numOfColumns: Int = getColumnCount()
+        setAdapter(numOfColumns)
+        setObserver()
+    }
+
+    private fun setAdapter(numOfColumns: Int) {
+        mAdapter = PhotoAdapter()
+        _binding.photosRecyclerView.layoutManager =
+            GridLayoutManager(requireContext(), numOfColumns)
+        _binding.photosRecyclerView.adapter = mAdapter
+    }
+
+    private fun getColumnCount(): Int {
+        return if (DisplayUtility.isInLandscapeMode(requireContext())) {
+            LANDSCAPE_TILE_COUNT
+        } else {
+            PORTRAIT_TILE_COUNT
+        }
+    }
+
+    private fun doPhotoRequest(albumId: String?) {
+        if (NetworkChecker(requireContext()).isConnected()) {
             albumId?.let { albumViewModel.getPhotos(it) }
         } else {
             activity?.toast(getString(R.string.no_internet_connection))
         }
-        val numOfColumns: Int = if (DisplayUtility.isInLandscapeMode(requireContext())) {
-            LANDSCAPE_TILE_COUNT
-        } else {
-            PORTRATE_TILE_COUNT
-        }
-
-        mAdapter = PhotoAdapter()
-        _binding.photosRecyclerView.layoutManager = GridLayoutManager(requireContext(), numOfColumns)
-        _binding.photosRecyclerView.adapter = mAdapter
-
-        setObserver()
     }
 
     private fun setObserver() {
