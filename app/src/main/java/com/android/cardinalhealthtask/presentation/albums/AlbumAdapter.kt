@@ -4,22 +4,29 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.cardinalhealthtask.domain.model.Album
+import com.android.cardinalhealthtask.presentation.base.BaseDiff
 import com.cardinalhealth.sample.R
 import com.cardinalhealth.sample.databinding.HolderAlbumBinding
-import kotlin.properties.Delegates
 
 class AlbumAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var callback: Callback? = null
+    var mAlbumList:  MutableList<Album> = mutableListOf()
 
     fun setListener(callback: Callback) {
         this.callback = callback
     }
 
-    var mAlbumList: List<Album>? by Delegates.observable(emptyList()) { _, _, _ ->
-        notifyDataSetChanged()
+    fun setAlbumData(mAlbumList: List<Album>) {
+        val albumDiff =
+            SuggestionsDiff(this.mAlbumList, mAlbumList)
+        val diffResults = DiffUtil.calculateDiff(albumDiff)
+        this.mAlbumList.clear()
+        this.mAlbumList.addAll(mAlbumList)
+        diffResults.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -30,11 +37,11 @@ class AlbumAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return if (mAlbumList.isNullOrEmpty()) 0 else mAlbumList?.size!!
+        return if (mAlbumList.isNullOrEmpty()) 0 else mAlbumList.size
     }
 
     private fun getItem(position: Int): Album {
-        return mAlbumList?.get(position)!!
+        return mAlbumList[position]
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -43,10 +50,6 @@ class AlbumAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class PostViewHolder(private val viewDataBinding: ViewDataBinding) :
         RecyclerView.ViewHolder(viewDataBinding.root) {
-
-        init {
-
-        }
 
         fun onBind(post: Album) {
             (viewDataBinding as HolderAlbumBinding).album = post
@@ -62,5 +65,15 @@ class AlbumAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Callback {
         fun onItemClick(album: Album)
+    }
+
+    inner class SuggestionsDiff(
+        private val oldList: List<Album>,
+        private val newList: List<Album>
+    ) : BaseDiff<Album>(oldList, newList) {
+
+        override fun areItemsTheSame(oldPosition: Int, newPosition: Int): Boolean {
+            return oldList[oldPosition].id == newList[newPosition].id
+        }
     }
 }
