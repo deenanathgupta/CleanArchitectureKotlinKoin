@@ -8,28 +8,13 @@
         android:layout_height="match_parent"
         tools:context="com.android.cardinalhealthtask.presentation.albums.MainActivity">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/album_recycler_view"
+        <fragment
+            android:id="@+id/container"
             android:layout_width="match_parent"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:itemCount="10"
-            tools:listitem="@layout/holder_album"/>
-
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/posts_progress_bar"
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/album_recycler_view" />
-
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/album_navigation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

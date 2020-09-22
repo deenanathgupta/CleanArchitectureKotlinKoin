@@ -18,6 +18,7 @@ private val getPhotosUseCase: GetPhotosUseCase) : BaseViewModel() {
     val photosData = MutableLiveData<List<AlbumItem>>()
     val showProgressbar = MutableLiveData<Boolean>()
     val messageData = MutableLiveData<String>()
+    val clickedAlbum = MutableLiveData<Album>()
 
     fun getAlbums() {
         showProgressbar.value = true
@@ -36,6 +37,7 @@ private val getPhotosUseCase: GetPhotosUseCase) : BaseViewModel() {
     }
 
     fun getPhotos(id:String) {
+        showProgressbar.value = true
         getPhotosUseCase.invoke(id, object : UseCaseResponse<List<AlbumItem>> {
             override fun onError(errorModel: ErrorModel?) {
                 Log.i(TAG, "onError: $errorModel")
