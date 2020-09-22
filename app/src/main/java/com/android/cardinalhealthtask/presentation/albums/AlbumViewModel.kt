@@ -1,6 +1,5 @@
 package com.android.cardinalhealthtask.presentation.albums
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.android.cardinalhealthtask.domain.model.Album
 import com.android.cardinalhealthtask.domain.model.AlbumItem
@@ -12,7 +11,8 @@ import com.android.cardinalhealthtask.presentation.base.BaseViewModel
 
 class AlbumViewModel constructor(
     private val getAlbumsUseCase: GetAlbumsUseCase,
-private val getPhotosUseCase: GetPhotosUseCase) : BaseViewModel() {
+    private val getPhotosUseCase: GetPhotosUseCase
+) : BaseViewModel() {
 
     val albumData = MutableLiveData<List<Album>>()
     val photosData = MutableLiveData<List<AlbumItem>>()
@@ -24,7 +24,6 @@ private val getPhotosUseCase: GetPhotosUseCase) : BaseViewModel() {
         showProgressbar.value = true
         getAlbumsUseCase.invoke(null, object : UseCaseResponse<List<Album>> {
             override fun onSuccess(result: List<Album>) {
-                Log.i(TAG, "result: $result")
                 albumData.value = result
                 showProgressbar.value = false
             }
@@ -36,17 +35,15 @@ private val getPhotosUseCase: GetPhotosUseCase) : BaseViewModel() {
         })
     }
 
-    fun getPhotos(id:String) {
+    fun getPhotos(id: String) {
         showProgressbar.value = true
         getPhotosUseCase.invoke(id, object : UseCaseResponse<List<AlbumItem>> {
             override fun onError(errorModel: ErrorModel?) {
-                Log.i(TAG, "onError: $errorModel")
                 messageData.value = errorModel?.message
                 showProgressbar.value = false
             }
 
             override fun onSuccess(result: List<AlbumItem>) {
-                Log.i(TAG, "onSuccess: $result")
                 photosData.value = result
                 showProgressbar.value = false
             }

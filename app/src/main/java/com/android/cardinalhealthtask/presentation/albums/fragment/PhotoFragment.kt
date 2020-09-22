@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import com.android.cardinalhealthtask.extension.toast
+import com.android.cardinalhealthtask.network.NetworkChecker
 import com.android.cardinalhealthtask.presentation.albums.AlbumViewModel
 import com.android.cardinalhealthtask.presentation.albums.PhotoAdapter
 import com.android.cardinalhealthtask.utils.*
@@ -32,7 +34,7 @@ class PhotoFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val albumId= arguments?.getString(ID)
-        if(isNetworkAvailable()) {
+        if(NetworkChecker(requireContext()).isConnected()) {
             albumId?.let { albumViewModel.getPhotos(it) }
         } else {
             activity?.toast(getString(R.string.no_internet_connection))
@@ -47,6 +49,10 @@ class PhotoFragment : Fragment() {
         _binding.photosRecyclerView.layoutManager = GridLayoutManager(requireContext(), numOfColumns)
         _binding.photosRecyclerView.adapter = mAdapter
 
+        setObserver()
+    }
+
+    private fun setObserver() {
         with(albumViewModel) {
             photosData.observe(viewLifecycleOwner, Observer {
                 _binding.postsProgressBar.visibility = View.GONE
@@ -64,7 +70,5 @@ class PhotoFragment : Fragment() {
 
     companion object {
         const val ID = "ALBUM_ID"
-        @JvmStatic
-        fun newInstance() = PhotoFragment()
     }
 }

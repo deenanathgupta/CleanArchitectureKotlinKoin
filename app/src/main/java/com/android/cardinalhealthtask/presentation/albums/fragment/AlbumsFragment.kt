@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.android.cardinalhealthtask.domain.model.Album
 import com.android.cardinalhealthtask.presentation.albums.AlbumAdapter
 import com.android.cardinalhealthtask.presentation.albums.AlbumViewModel
-import com.android.cardinalhealthtask.utils.isNetworkAvailable
-import com.android.cardinalhealthtask.utils.toast
+import com.android.cardinalhealthtask.extension.toast
+import com.android.cardinalhealthtask.network.NetworkChecker
 import com.cardinalhealth.sample.R
 import com.cardinalhealth.sample.databinding.FragmentAlbumsBinding
 import kotlinx.android.synthetic.main.fragment_albums.*
@@ -47,7 +47,7 @@ class AlbumsFragment : Fragment(), AlbumAdapter.Callback {
         _binding?.albumRecyclerView?.layoutManager = GridLayoutManager(requireContext(), 2)
         _binding?.albumRecyclerView?.adapter = mAdapter
         mAdapter?.setListener(this)
-        if (isNetworkAvailable()) {
+        if (NetworkChecker(requireContext()).isConnected()) {
             albumViewModel.getAlbums()
         } else {
             activity?.toast(getString(R.string.no_internet_connection))

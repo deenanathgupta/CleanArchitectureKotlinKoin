@@ -1,7 +1,7 @@
 package com.android.cardinalhealthtask.di.module
 
-import com.android.cardinalhealthtask.data.repository.AlbumRepositoryImp
 import com.android.cardinalhealthtask.data.remote.ApiService
+import com.android.cardinalhealthtask.data.repository.AlbumRepositoryImp
 import com.android.cardinalhealthtask.domain.exception.ApiErrorHandle
 import com.android.cardinalhealthtask.domain.repository.AlbumRepository
 import com.android.cardinalhealthtask.domain.usecase.GetAlbumsUseCase
