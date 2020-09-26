@@ -1,4 +1,4 @@
-# Cardinal Coding Task
+# Clean Architecture, Kotlin, Koin sample
 ### Technologies & Methodologies which used:
 1. Kotlin (Language)
 2. Android X Artifacts
