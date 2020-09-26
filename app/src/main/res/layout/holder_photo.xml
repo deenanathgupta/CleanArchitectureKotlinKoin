@@ -8,7 +8,7 @@
 
         <variable
             name="album"
-            type="com.android.cardinalhealthtask.domain.model.AlbumItem" />
+            type="com.android.sample.domain.model.AlbumItem" />
     </data>
 
     <FrameLayout

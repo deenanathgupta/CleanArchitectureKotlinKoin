@@ -9,7 +9,7 @@
 
         <variable
             name="album"
-            type="com.android.cardinalhealthtask.domain.model.Album" />
+            type="com.android.sample.domain.model.Album" />
     </data>
 
 

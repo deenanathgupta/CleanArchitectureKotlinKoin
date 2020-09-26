@@ -8,7 +8,7 @@
 
         <variable
             name="model"
-            type="com.android.cardinalhealthtask.presentation.albums.AlbumViewModel" />
+            type="com.android.sample.presentation.albums.AlbumViewModel" />
     </data>
 
     <FrameLayout
@@ -29,7 +29,7 @@
             android:layout_gravity="center"
             />
 
-        <com.android.cardinalhealthtask.presentation.common.NoInternetLayout
+        <com.android.sample.presentation.common.NoInternetLayout
             android:id="@+id/lyt_no_internet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/albumsFragment"
-        android:name="com.android.cardinalhealthtask.presentation.albums.fragment.AlbumsFragment"
+        android:name="com.android.sample.presentation.albums.fragment.AlbumsFragment"
         android:label="fragment_albums"
         tools:layout="@layout/fragment_albums" />
     <fragment
         android:id="@+id/photoFragment"
-        android:name="com.android.cardinalhealthtask.presentation.albums.fragment.PhotoFragment"
+        android:name="com.android.sample.presentation.albums.fragment.PhotoFragment"
         android:label="PhotoFragment" />
     <action
         android:id="@+id/action_photoFragment"

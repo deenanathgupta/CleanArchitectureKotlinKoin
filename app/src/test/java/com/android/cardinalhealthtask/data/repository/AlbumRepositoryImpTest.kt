@@ -1,7 +1,8 @@
 package com.android.cardinalhealthtask.data.repository
 
-import com.android.cardinalhealthtask.domain.model.Album
-import com.android.cardinalhealthtask.domain.model.AlbumItem
+import com.android.sample.data.repository.AlbumRepositoryImp
+import com.android.sample.domain.model.Album
+import com.android.sample.domain.model.AlbumItem
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
